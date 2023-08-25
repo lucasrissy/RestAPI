@@ -1,6 +1,5 @@
 package com.example.storage.controller;
 
-import com.example.storage.UserRegistrationRequest;
 import com.example.storage.User;
 import com.example.storage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
-@RequestMapping(value = "/login")
+@RequestMapping("/login")
 public class UserController {
 
     @Autowired
@@ -19,32 +18,37 @@ public class UserController {
 
 
     @GetMapping
-    public List<User> findAll(){
-       return userService.getAllUser();
+    public List<User> findAll() {
+        return userService.getAllUser();
     }
 
-    @PostMapping(name = "/login/register")
-    public ResponseEntity<String> register(@RequestBody UserRegistrationRequest request){
-       try{
-           User newUser = userService.insert(request);
-           if(request != null){
-               return ResponseEntity.ok("ok");
-           }else{
-               return ResponseEntity.badRequest().body("Registration Failed");
-           }
-       }
-       catch (IllegalArgumentException e){
-           return ResponseEntity.badRequest().body("user already exist");
-       }
-       catch (Exception e){
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("registration Failed");
-       }
+    @PostMapping("/authenticate")
+    public ResponseEntity<String> getUser(@RequestBody User user){
+        if (userService.authenticate(user.getFullName(), user.getPassword()) != null){
+            return ResponseEntity.ok("Autenticação bem-sucedida");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nome de usuário ou senha inválidos");
+    }
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody User request) {
+        try {
+            userService.saveUser(request);
+            if (request != null) {
+                return ResponseEntity.ok("ok");
+            } else {
+                return ResponseEntity.badRequest().body("Registration Failed");
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("user already exist");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("registration Failed");
+        }
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody UserRegistrationRequest request) {
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody User userUpdate) {
         try {
-            userService.updateUser(id, request);
+            userService.updateUser(id, userUpdate);
             return ResponseEntity.ok("User data updated successfully");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("User not found");
@@ -55,18 +59,18 @@ public class UserController {
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteCurrentUserProfile() {
+    public ResponseEntity<String> deleteCurrentUserProfile(@PathVariable Long id) {
 
-                @AuthenticationPrincipal(expression = "id") Long userId
-    {
+        {
             try {
-                userService.deleteUser(userId);
+                userService.deleteUser(id);
                 return ResponseEntity.ok("User account deleted successfully");
             } catch (IllegalArgumentException e) {
                 return ResponseEntity.badRequest().body("User not found");
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User account deletion failed");
             }
-    }
+        }
 
+    }
 }

@@ -1,20 +1,22 @@
 package com.example.storage.service;
 
 import com.example.storage.User;
-import com.example.storage.UserRegistrationRequest;
 
 import java.util.List;
 
 public interface UserService {
     List<User> getAllUser();
 
-    User getTodoById(Long id);
+    User getUserId(Long id);
 
-    User insert(UserRegistrationRequest request);
+    void saveUser(User user);
 
-    void updateUser(Long id, UserRegistrationRequest request);
+    User updateUser(Long id,  User user);
 
     void deleteUser(Long id);
+
+    User authenticate(String name, String password);
+
 }
 
 // The interface above defines the base CRUD operations that we will implement in

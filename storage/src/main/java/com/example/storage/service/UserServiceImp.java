@@ -1,11 +1,11 @@
 package com.example.storage.service;
 
 import com.example.storage.User;
-import com.example.storage.UserRegistrationRequest;
 import com.example.storage.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
 
 @Service
@@ -17,43 +17,53 @@ public class UserServiceImp implements UserService{
     @Override
     public List<User> getAllUser() {
        return userRepository.findAll();
-
-
     }
 
     @Override
-    public User getTodoById(Long id) {
-        return null;
+    public User getUserId(Long id) {
+        return userRepository.findById(id).get();
     }
 
+    @Override
+    public void saveUser(User user) {
+        this.userRepository.save(user);
+    }
 
     @Override
-    public User insert(UserRegistrationRequest request) {
-        if(userRepository.findByEmail(request.getEmail()) != null){
-            throw new IllegalArgumentException("User already exist");
+    public User updateUser(Long id, User user) {
+        User existingUser = userRepository.findById(id).orElse(null);
+
+        if (existingUser == null ){
+            try {
+                throw new UserPrincipalNotFoundException("User not Found");
+            } catch (UserPrincipalNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
-        User newUser = new User();
-        newUser.setFullName(request.getFullName());
-        newUser.setEmail(request.getEmail());
-        newUser.setPhone(request.getPhone());
-        newUser.setPassword(request.getPassword());
 
-        return userRepository.save(newUser);
+        existingUser.setEmail(user.getEmail());
+        existingUser.setFullName(user.getFullName());
+        existingUser.setPassword(user.getPassword());
+        existingUser.setPhone(user.getPhone());
+
+        return userRepository.save(existingUser);
     }
 
-    @Override
-    public void updateUser(Long userId, UserRegistrationRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        user.setFullName(request.getFullName());
-        user.setPhone(request.getPhone());
-        userRepository.save(user);
-    }
+
 
     @Override
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        userRepository.delete(user);
+                userRepository.delete(user);
     }
+
+    @Override
+    public User authenticate(String name, String password) {
+        System.out.println(userRepository.findByName(name));
+        return  userRepository.findByName(name);
+        return null;
+    }
+
+
 }

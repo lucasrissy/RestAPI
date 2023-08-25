@@ -1,0 +1,39 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    height: 100vh;
+    background-image: url("/Resources/young-woman-wearing-coat-hat-scarf-riding-bicycle-park-fall-foliage-from-wind-is-blowing-autumn-season-cartoon-character-vector-illustration/JuOct40.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container{
+    width: 400px;
+    height: 500px;
+    background-color: rgba(255,255,255,0.25);
+    backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.form input{
+    height: 50px;
+    width: 100%;
+    border: none;
+    border-radius: 9px;
+}
+.form input::placeholder{
+    text-align: center;
+}
