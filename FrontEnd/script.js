@@ -1,28 +1,18 @@
 const container = document.querySelector(".container");
 
 
-const data = {
-    fullName : "Maria Julia",
-    email: "mariajulia@gmail.com",
-    password: "mariajulia123",
-    phone: "123456789"
+
+window.onload = (event) =>{
+  inicialize();
 }
 
 
-function login(){
-
-    const name = document.querySelector("#name").value;
-    const password = document.querySelector("#password").value;
-
-    
-
-}
-  fetch('http://localhost:8081/login/register', {
-    method: 'POST',
+function inicialize (){
+  fetch('http://localhost:8082/login', {
+    method: 'GET',
     headers: {
-        'Content-Type': 'application/json' // aqui eu informo o tipo do meu conteudo que sera enviado
+        'Content-Type': 'application/json' 
     },
-    body: JSON.stringify(data)
   })
   .then(response => {
     if(!response.ok){
@@ -31,8 +21,34 @@ function login(){
     return response.json()
   })
   .then(data => { 
-    console.log(data)
+    populate(data)
   })
   .catch(error => {
     console.log(error)
   })
+}
+
+function populate(data){
+  
+  const table = document.querySelector("table")
+  table.innerHTML = `<tr>
+                        <th  scope="row">Name</th>
+                        <th  scope="row">Email</th>
+                        <th  scope="row">Phone</th>
+                        </tr>`
+
+  data.forEach(element => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td  scope="col">${element.fullName}</td>
+                      <td  scope="col">${element.email}</td>
+                      <td  scope="col">${element.phone}</td>`
+                      table.appendChild(row);
+  });
+
+  
+}
+
+
+
+
+

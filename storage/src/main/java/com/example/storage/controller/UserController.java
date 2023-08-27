@@ -22,13 +22,7 @@ public class UserController {
         return userService.getAllUser();
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<String> getUser(@RequestBody User user){
-        if (userService.authenticate(user.getFullName(), user.getPassword()) != null){
-            return ResponseEntity.ok("Autenticação bem-sucedida");
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nome de usuário ou senha inválidos");
-    }
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User request) {
         try {

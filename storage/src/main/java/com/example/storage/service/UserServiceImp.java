@@ -58,12 +58,7 @@ public class UserServiceImp implements UserService{
                 userRepository.delete(user);
     }
 
-    @Override
-    public User authenticate(String name, String password) {
-        System.out.println(userRepository.findByName(name));
-        return  userRepository.findByName(name);
-        return null;
-    }
+
 
 
 }
