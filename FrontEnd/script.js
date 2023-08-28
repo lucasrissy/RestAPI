@@ -48,6 +48,53 @@ function populate(data){
   
 }
 
+const createNewClient = () =>{
+  
+  const data = {
+    fullName : document.querySelector('#name').value,
+    email : document.querySelector('#email').value,
+    phone : document.querySelector('#phone').value
+  }
+
+  fetch('http://localhost:8082/login/register', {
+    method:'POST',
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body:JSON.stringify(data) // transformar o json para string
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Erro na solicitação")
+    }
+  
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return response.json();
+    } else {
+     
+      return response.text(); 
+    }
+  })
+  .then(data => {
+    if (typeof data === 'object') {
+      console.log(data);
+    } else {
+      
+      console.log("Resposta do servidor:", data);
+    }
+  })
+  .catch(error => console.log(error))
+
+  document.querySelector('.container').style.display = "flex";
+  document.querySelector('.createClient').style.display = "none";
+  inicialize();
+}
+
+const showCreateClient = () => {
+  document.querySelector('.container').style.display = "none";
+  document.querySelector('.createClient').style.display = "flex";
+}
 
 
 

@@ -14,11 +14,19 @@
        
         
        </table> 
-       <div class="btn">
-        <button>Create new Client</button> 
+       <div class="btn-container">
+        <button onclick="showCreateClient()">Create new Client</button> 
+        <button>Edit a Client</button> 
        </div>
            
     </div>  
+    <div class="createClient">
+        <input type="text" placeholder="Type your name" id="name">
+        <input type="text" placeholder="Type your email" id="email">
+        <input type="text" placeholder="Type your phone xxx-xxx-xxx" id="phone">
+        <button onclick="createNewClient()">Submit</button>
+    </div>
+
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
